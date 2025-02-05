@@ -69,7 +69,8 @@ def add_block(board,n=1):
 def drawtile(screen,board):
 	for i in range(4):
 		for j in range(4):
-			pygame.draw.rect(screen,(153,153,255),(stripsize*(i+1)+tilesize*i,stripsize*(j+1)+tilesize*j+topsize,tilesize,tilesize))
+
+			pygame.draw.rect(screen,block_colors[board[i][j]],(stripsize*(i+1)+tilesize*i,stripsize*(j+1)+tilesize*j+topsize,tilesize,tilesize))
 			if board[i][j]!=0:
 				text=font.render(str(board[i][j]),True,(0,0,0))
 				text_rect = text.get_rect(center=(stripsize*(i+1)+tilesize*i+tilesize//2,stripsize*(j+1)+tilesize*j+tilesize//2+topsize))
@@ -129,6 +130,25 @@ score=0
 font=pygame.font.Font(None,36)
 big_font=pygame.font.SysFont("gurmukhi",80)
 running=True
+block_colors = {
+    0: (205, 193, 180),      # Empty tile
+    2: (238, 228, 218),      # Light beige
+    4: (237, 224, 200),      # Beige
+    8: (242, 177, 121),      # Light orange
+    16: (245, 149, 99),      # Darker orange
+    32: (246, 124, 95),      # Reddish-orange
+    64: (246, 94, 59),       # Red
+    128: (237, 207, 114),    # Yellow
+    256: (237, 204, 97),     # Golden yellow
+    512: (237, 200, 80),     # Gold
+    1024: (237, 197, 63),    # Dark gold
+    2048: (237, 194, 46),    # Deep gold
+    4096: (60, 58, 50),      # Dark grayish
+    8192: (40, 38, 30),      # Darker gray
+    16384: (20, 18, 10),     # Almost black
+    32768: (0, 0, 0),        # Black
+    65536: (255, 0, 0),      # Bright red (custom for extreme cases)
+}
 
 if not isfile("score.txt"):
 	with open("score.txt","w") as f:
