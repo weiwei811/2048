@@ -4,8 +4,9 @@ from os.path import isfile
 
 pygame.init()
 class Button:
-    def __init__(self, color, x, y, width, height, text=''):
+    def __init__(self, color, hovercolor, x, y, width, height, text=''):
         self.color = color
+        self.hovercolor=hovercolor
         self.x = x
         self.y = y
         self.width = width
@@ -13,8 +14,11 @@ class Button:
         self.text = text
 
     def draw(self):
-
-        pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height), 0)
+        pos=pygame.mouse.get_pos()
+        if self.isOver(pos):
+            pygame.draw.rect(screen, self.hovercolor, (self.x, self.y, self.width, self.height), 0)
+        else:
+            pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height), 0)
         
         if self.text != '':
             font = pygame.font.SysFont(None, 60)
@@ -27,6 +31,7 @@ class Button:
             if self.y < pos[1] < self.y + self.height:
                 return True
         return False
+    
 def print_board(board):
     for i in board:
         print(*i)
@@ -179,11 +184,11 @@ tilesize=150
 stripsize=20
 height=4*tilesize+5*stripsize+topsize
 width=4*tilesize+5*stripsize
-buttonwidth=100
+buttonwidth=155
 buttonheight=70
 y_diff=10
-restart_button=Button((255,255,255),width/2-buttonwidth/2,height/2-buttonheight-y_diff,buttonwidth,buttonheight,"restart")
-exit_button=Button((255,255,255),width/2-buttonwidth/2,height/2+y_diff,buttonwidth,buttonheight,"exit")
+restart_button=Button((200,200,200),(255,255,255),width/2-buttonwidth/2,height/2-buttonheight-y_diff,buttonwidth,buttonheight,"Restart")
+exit_button=Button((200,200,200),(255,255,255),width/2-buttonwidth/2,height/2+y_diff,buttonwidth,buttonheight,"Exit")
 screen=pygame.display.set_mode((width,height))
 pygame.display.set_caption("2048")
 clock=pygame.time.Clock()
@@ -232,6 +237,13 @@ while running:
                 board,s=move(board,m[event.key])
                 score+=s
                 break
+        elif event.type==pygame.MOUSEBUTTONDOWN:
+            pos=pygame.mouse.get_pos()
+            if restart_button.isOver(pos) and death(board):
+                score=0
+                board=init()
+            if exit_button.isOver(pos) and death(board):
+                running=False
 
         
 
@@ -245,3 +257,4 @@ while running:
                 f.write(str(hs))
     pygame.display.flip()
     clock.tick(60)
+
