@@ -1,2 +1,0 @@
-score.txt
-.DS_Store
